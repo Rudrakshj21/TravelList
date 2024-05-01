@@ -1,20 +1,38 @@
 import { useState } from "react";
 import "./index.css";
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 4, packed: false },
-  { id: 3, description: "Earphone", quantity: 1, packed: true },
-];
+// const initialItems = [
+//   { id: 1, description: "Passports", quantity: 2, packed: false },
+//   { id: 2, description: "Socks", quantity: 4, packed: false },
+//   { id: 3, description: "Earphone", quantity: 1, packed: true },
+// ];
 export default function App() {
   const [items, setItems] = useState([]);
+
   function handleAddItems(newItem) {
     setItems((currentItems) => [...currentItems, newItem]);
+  }
+
+  function handleDeleteItem(id) {
+    setItems((currentItems) => currentItems.filter((item) => item.id !== id));
+  }
+
+  function handleToggleItem(id) {
+    setItems((currentItems) =>
+      // update packed item for given id
+      items.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
   }
   return (
     <div className="app">
       <Logo />
       <Form items={items} onAddItems={handleAddItems} />
-      <PackingList items={items} />
+      <PackingList
+        items={items}
+        onDeleteItem={handleDeleteItem}
+        onToggleItem={handleToggleItem}
+      />
       <Stats />
     </div>
   );
@@ -61,24 +79,36 @@ function Form({ items, onAddItems }) {
     </form>
   );
 }
-function PackingList({ items }) {
+function PackingList({ items, onDeleteItem, onToggleItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((e) => (
-          <Item item={e} key={e.id} />
+          <Item item={e} key={e.id} onDeleteItem={onDeleteItem} />
         ))}
       </ul>
     </div>
   );
 }
-function Item({ item }) {
+function Item({ item, onDeleteItem }) {
+  const [shouldRender, setShouldRender] = useState(true);
+  function handleCheckedItem(item) {
+    console.log("before", item);
+    item.packed = !item.packed;
+    console.log("after", item);
+    setShouldRender(!shouldRender);
+  }
   return (
     <li>
+      <input
+        type="checkbox"
+        value={item.packed}
+        onClick={(e) => handleCheckedItem(item)}
+      />
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.description} {item.quantity}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
