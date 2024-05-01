@@ -84,26 +84,24 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
     <div className="list">
       <ul>
         {items.map((e) => (
-          <Item item={e} key={e.id} onDeleteItem={onDeleteItem} />
+          <Item
+            item={e}
+            key={e.id}
+            onDeleteItem={onDeleteItem}
+            onToggleItem={onToggleItem}
+          />
         ))}
       </ul>
     </div>
   );
 }
-function Item({ item, onDeleteItem }) {
-  const [shouldRender, setShouldRender] = useState(true);
-  function handleCheckedItem(item) {
-    console.log("before", item);
-    item.packed = !item.packed;
-    console.log("after", item);
-    setShouldRender(!shouldRender);
-  }
+function Item({ item, onDeleteItem, onToggleItem }) {
   return (
     <li>
       <input
         type="checkbox"
         value={item.packed}
-        onClick={(e) => handleCheckedItem(item)}
+        onClick={(e) => onToggleItem(item.id)}
       />
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.description} {item.quantity}
