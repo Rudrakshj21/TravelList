@@ -1,12 +1,12 @@
 import { useState } from "react";
 import "./index.css";
-// const initialItems = [
-//   { id: 1, description: "Passports", quantity: 2, packed: false },
-//   { id: 2, description: "Socks", quantity: 4, packed: false },
-//   { id: 3, description: "Earphone", quantity: 1, packed: true },
-// ];
+const initialItems = [
+  { id: 1, description: "Passports", quantity: 2, packed: false },
+  { id: 2, description: "Socks", quantity: 4, packed: false },
+  { id: 3, description: "Earphone", quantity: 1, packed: true },
+];
 export default function App() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(initialItems);
 
   function handleAddItems(newItem) {
     setItems((currentItems) => [...currentItems, newItem]);
@@ -100,8 +100,9 @@ function Item({ item, onDeleteItem, onToggleItem }) {
     <li>
       <input
         type="checkbox"
+        checked={item.packed}
         value={item.packed}
-        onClick={(e) => onToggleItem(item.id)}
+        onChange={(e) => onToggleItem(item.id)}
       />
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.description} {item.quantity}
