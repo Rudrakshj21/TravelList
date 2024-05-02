@@ -1,10 +1,10 @@
 import { useState } from "react";
 import "./index.css";
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 4, packed: false },
-  { id: 3, description: "Earphone", quantity: 1, packed: true },
-];
+// const initialItems = [
+//   { id: 1, description: "Passports", quantity: 2, packed: false },
+//   { id: 2, description: "Socks", quantity: 4, packed: false },
+//   { id: 3, description: "Earphone", quantity: 1, packed: true },
+// ];
 export default function App() {
   const [items, setItems] = useState([]);
 
@@ -32,6 +32,7 @@ export default function App() {
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
+        setItems={setItems}
       />
       <Stats items={items} />
     </div>
@@ -79,7 +80,7 @@ function Form({ items, onAddItems }) {
     </form>
   );
 }
-function PackingList({ items, onDeleteItem, onToggleItem }) {
+function PackingList({ items, onDeleteItem, onToggleItem, setItems }) {
   const [sortBy, setSortBy] = useState("input");
   let sortedItems = [];
   if (sortBy === "input") {
@@ -121,6 +122,15 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
           <option value="packed">Sort by packed status</option>
           <option value="quantity">Sort by quantity</option>
         </select>
+        <button
+          // clear items
+          onClick={() => {
+            setItems([]);
+            setSortBy("input");
+          }}
+        >
+          Clear List
+        </button>
       </div>
     </div>
   );
